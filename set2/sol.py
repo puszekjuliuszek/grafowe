@@ -59,17 +59,16 @@ def dfs_visit(G, flow, s, t):
 
 def Edmonds_Karp(G, Flow, s, t):
     n = len(G)
-    path = dfs_visit(G, Flow, s, t)
+    path = bfs(G, Flow, s, t)
     while path != None:
         flow = min(G[path[i]][path[i - 1]] - Flow[path[i]][path[i - 1]] for i in range(len(path) - 1, 0, -1))
-        print(flow)
         for i in range(len(path) - 1, 0, -1):
             Flow[path[i]][path[i - 1]] += flow
-        path = bfs(G, Flow, s, t)
+        path = dfs_visit(G, Flow, s, t)
     return sum(Flow[s][i] for i in range(n))
 
 
 if __name__ == "__main__":
-    V, L = loadDirectedWeightedGraph("flow/simple")
+    V, L = loadDirectedWeightedGraph("flow/clique100")
     graph, flow = make_graph(V, L)
     print(Edmonds_Karp(graph, flow, 0, V - 1))
